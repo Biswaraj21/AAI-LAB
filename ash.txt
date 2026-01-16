@@ -1,0 +1,54 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <tuple>
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) return 1;
+    std::string m = argv[1];
+
+    std::string k, n;
+    // Store assignment as a pair: <first_element, vector_of_remaining_elements>
+    std::vector<std::pair<std::string, std::vector<std::string>>> assgn;
+
+    std::ifstream f("sample.txt");
+    if (!f.is_open()) return 1;
+
+    std::string line;
+    while (std::getline(f, line)) {
+        if (line.empty() || line[0] == '%') continue;
+
+        std::stringstream ss(line);
+        std::string tag;
+        ss >> tag;
+
+        if (tag == "K") {
+            ss >> k;
+        } else if (tag == "N") {
+            ss >> n;
+        } else if (tag == "A") {
+            std::vector<std::string> tokens;
+            std::string temp;
+            // Skip the first word after 'A' (equivalent to Python's [2:])
+            ss >> temp; 
+            
+            while (ss >> temp) {
+                tokens.push_back(temp);
+            }
+
+            if (!tokens.empty()) {
+                // Remove the last element (equivalent to Python's [:-1])
+                tokens.pop_back(); 
+                
+                if (!tokens.empty()) {
+                    std::string first = tokens[0];
+                    std::vector<std::string> rest(tokens.begin() + 1, tokens.end());
+                    assgn.push_back({first, rest});
+                }
+            }
+        }
+    }
+    return 0;
+}
