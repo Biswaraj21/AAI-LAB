@@ -46,11 +46,31 @@ def is_valid(schedule):
     return True
 
 
-def is_prompt_v
+def is_prompt_valid(schedule):
+    days=0
+    i=0
+    while(1):
+        prompts=[int(k) for _ in range(int(n))]
+        days+=1
+        check=1
+        while(check):
+            if i>=len(schedule):
+                return(days)
+            print(prompts)
+            needed=int(assgn[schedule[i]-1][0])
+            check=0
+            for j in range(len(prompts)):
+                if prompts[j]>=needed:
+                    prompts[j]-=needed
+                    i+=1
+                    check=1
+                    break
+    return(days)
+
 
 visited=set()
 permutation(assgn_no,0,len(assgn_no)-1,visited)
 for v in visited:
     if is_valid(v):
         print(v)
-#print(is_valid([1,7,2,4,5,6,8,3]))
+print(is_prompt_valid([1,7,2,4,5,6,8,3]))
