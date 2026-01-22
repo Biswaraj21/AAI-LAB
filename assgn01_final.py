@@ -1,6 +1,9 @@
 import sys
 import copy
 
+output=open("output.txt","w")
+sys.stdout=output
+
 def read_input(filename):
     assignments={}
     N=K=None
@@ -56,7 +59,6 @@ def back(day,max_day,N,K,assignments,completed,schedule,all_schedules):
             assign(aid_list,idx+1)
             return
         assign(aid_list,idx+1)
-        progress=False
         for s in range(N):
             need=assignments[aid]["prompts"]
             if prompt_left[s]>=need:
@@ -90,3 +92,6 @@ if __name__=="__main__":
             for s in sch[day]:
                 print(f" Student {s}: {sch[day][s]}")
         print('-'*40)
+        
+sys.stdout=sys.__stdout__
+output.close()
