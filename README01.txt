@@ -47,10 +47,10 @@ A 3 2 2 0
 How to Run:
 
 Command:
-python assgn01_final.py <input-file> <number-of-days>
+python assg01.py <input-file> <number-of-days>
 
 Example:
-python assgn01_final.py input2.txt 3
+python assg01.py input02.txt 3
 
 ------------------------------------------------------------
 
@@ -69,18 +69,17 @@ Approach:
 - Prompt limits are enforced per student per day
 - Deep copies are used to safely store valid schedules
 
-The solution uses a simple brute-force method for clarity and easy
-explanation during viva.
+
 
 ------------------------------------------------------------
 
 Files Submitted:
-- assgn01_final.py  : Python source code
-- input1.txt
-- input2.txt
-- input3.txt        : Sample input files
+- assg01.py  : Python source code
+- input01.txt
+- input02.txt
+- input03.txt        : Sample input files
 - output.txt        : Generated output file
-- README.txt        : This file
+- README01.txt        : This file
 
 ------------------------------------------------------------
 
