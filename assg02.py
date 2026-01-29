@@ -1,108 +1,110 @@
 import sys
-import copy
 
-if len(sys.argv) < 5:
-    print("Usage:")
-    print("python assg02.py <input-file> <days|prompts> <N> <value> [--daily-sync]")
-    sys.exit(1)
-
-filename = sys.argv[1]
-mode = sys.argv[2]
-N = int(sys.argv[3])
-value = int(sys.argv[4])
-daily_sync = "--daily-sync" in sys.argv
+sys.setrecursionlimit(5000)
 
 def read_input(filename):
     assignments = {}
-    with open(filename, "r") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("%"):
-                continue
-            parts = line.split()
-            if parts[0] == "A":
-                aid = int(parts[1])
-                prompts = int(parts[2])
-                deps = []
-                for d in parts[3:]:
-                    if d == "0":
-                        break
-                    deps.append(int(d))
-                assignments[aid] = {"prompts": prompts, "deps": deps}
+    try:
+        with open(filename, "r") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("%"):
+                    continue
+                parts = line.split()
+                if parts[0] == "A":
+                    aid = int(parts[1])
+                    prompts = int(parts[2])
+                    deps = [int(d) for d in parts[3:] if d != "0"]
+                    assignments[aid] = {"prompts": prompts, "deps": deps}
+    except FileNotFoundError:
+        print(f"Error: File {filename} not found.")
+        sys.exit(1)
     return assignments
 
-def backtrack(day, max_day, completed, schedule, assignments, K):
-    if len(completed) == len(assignments):
-        return True
+def can_solve(max_days, prompts_per_student, num_students, assignments, daily_sync):
+    memo = {}
 
-    if day > max_day:
-        return False
-
-    def assign_for_day(student_idx, prompts, daily_tasks, current_completed):
-        if student_idx == N:
-            if any(daily_tasks[s] for s in daily_tasks):
-                next_completed = current_completed.copy()
-                return backtrack(day + 1, max_day, next_completed,
-                                 schedule, assignments, K)
-            return False
-
-        if assign_for_day(student_idx + 1, prompts, daily_tasks, current_completed):
+    def backtrack(day, completed_before_today):
+        if len(completed_before_today) == len(assignments):
             return True
 
-        for aid in assignments:
-            if aid in current_completed:
+        if day > max_days:
+            return False
+
+        state = (day, tuple(sorted(completed_before_today)))
+        if state in memo:
+            return memo[state]
+
+        def solve_day(student_capacities, current_day_done):
+            possible_tasks_found = False
+            
+            for aid, data in assignments.items():
+                if aid not in completed_before_today and aid not in current_day_done:
+                   
+                    if daily_sync:
+                        deps_met = all(d in completed_before_today for d in data["deps"])
+                    else:
+                        deps_met = all(d in completed_before_today or d in current_day_done for d in data["deps"])
+
+                    if deps_met:
+                        needed = data["prompts"]
+                        for s in range(num_students):
+                            if student_capacities[s] >= needed:
+                                possible_tasks_found = True
+                                
+                                student_capacities[s] -= needed
+                                current_day_done.add(aid)
+                                
+                                if solve_day(student_capacities, current_day_done):
+                                    return True
+                                
+                                current_day_done.remove(aid)
+                                student_capacities[s] += needed
+
+            return backtrack(day + 1, completed_before_today | current_day_done)
+
+        res = solve_day([prompts_per_student] * num_students, set())
+        memo[state] = res
+        return res
+
+    return backtrack(1, set())
+
+if __name__ == "__main__":
+    if len(sys.argv) < 5:
+        print("Usage: python assg02.py <input-file> <days|prompts> <N> <value> [--daily-sync]")
+        sys.exit(1)
+
+    filename = sys.argv[1]
+    mode = sys.argv[2]
+    N = int(sys.argv[3])
+    val = int(sys.argv[4])
+    daily_sync_flag = "--daily-sync" in sys.argv
+
+    data = read_input(filename)
+
+    if mode == "days":
+        K = val
+        d = 1
+        while d <= len(data) * 2:
+            if can_solve(d, K, N, data, daily_sync_flag):
+                print(f"Earliest completion time = {d} days")
+                break
+            d += 1
+
+    elif mode == "prompts":
+        D = val
+        low = 1
+        high = sum(a["prompts"] for a in data.values())
+        ans = high
+        
+        while low <= high:
+            mid = (low + high) // 2
+            if mid == 0: 
+                low = 1
                 continue
-
-            deps_ok = all(
-                d in completed if daily_sync else d in current_completed
-                for d in assignments[aid]["deps"]
-            )
-            if not deps_ok:
-                continue
-
-            need = assignments[aid]["prompts"]
-            if prompts[student_idx] >= need:
-                prompts[student_idx] -= need
-                daily_tasks[student_idx].append(aid)
-                current_completed.add(aid)
-
-                if assign_for_day(0, prompts, daily_tasks, current_completed):
-                    return True
-
-                current_completed.remove(aid)
-                daily_tasks[student_idx].pop()
-                prompts[student_idx] += need
-
-        return False
-
-    return assign_for_day(
-        0,
-        [K] * N,
-        {s: [] for s in range(N)},
-        completed.copy()
-    )
-
-assignments = read_input(filename)
-
-# ---------- PART 1 ----------
-if mode == "days":
-    K = value
-    day = 1
-    while True:
-        if backtrack(day, day, set(), {}, assignments, K):
-            print(f"Earliest completion time = {day} days")
-            break
-        day += 1
-
-# ---------- PART 2 ----------
-elif mode == "prompts":
-    max_day = value
-    K = 1
-    while True:
-        if backtrack(1, max_day, set(), {}, assignments, K):
-            print(f"Minimum prompts per student per day = {K}")
-            break
-        K += 1
-
-else:
-    print("Invalid mode. Use 'days' or 'prompts'.")
+            if can_solve(D, mid, N, data, daily_sync_flag):
+                ans = mid
+                high = mid - 1
+            else:
+                low = mid + 1
+        print(f"Minimum prompts per student per day = {ans}")
