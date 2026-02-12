@@ -1,0 +1,19 @@
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+
+%no of students
+N 3
+
+%no of prompts
+K 6
+
+A 1 1 8 0
+A 2 6 5 9 0
+A 3 2 8 0
+A 4 4 7 10 0
+A 5 5 3 6 0
+A 6 5 8 0
+A 7 5 2 1 0
+A 8 4 0
+A 9 3 8 0
+A 10 6 8 0
+

@@ -1,0 +1,20 @@
+% Sample Input 1: Linear Chain Dependency Structure
+% Each assignment depends on the previous one
+% Total: 10 assignments forming a chain A1 -> A2 -> A3 -> ... -> A10
+%
+% N = Number of students in a group
+N 2
+% K = Number of prompts allowed per day
+K 8
+% Assignment details with required prompts and Dependencies
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 2 0
+A 2 3 1 0
+A 3 2 2 0
+A 4 4 3 0
+A 5 1 4 0
+A 6 3 5 0
+A 7 2 6 0
+A 8 5 7 0
+A 9 2 8 0
+A 10 3 9 0

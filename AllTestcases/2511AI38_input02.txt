@@ -1,0 +1,20 @@
+% Input File 2: Parallel Branches with Convergence
+% This represents multiple independent paths that converge
+% N = Number of students in a group
+N 4
+% K = Number of prompts allowed per day
+K 6
+% Assignment details with required prompts and Dependencies
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 2 0
+A 2 3 0
+A 3 2 0
+A 4 3 1 0
+A 5 2 2 0
+A 6 4 3 0
+A 7 2 4 5 0
+A 8 3 5 6 0
+A 9 2 7 0
+A 10 4 7 8 0
+A 11 3 9 10 0
+A 12 2 11 0

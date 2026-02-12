@@ -1,0 +1,17 @@
+% Sample Test Case 1
+% N = Number of students
+N 3
+% K = Prompts per day
+K 5
+% Assignments
+
+A 1 2 0
+A 2 3 1 0
+A 3 2 1 0
+A 4 4 2 3 0
+A 5 1 2 0
+A 6 2 4 0
+A 7 3 4 5 0
+A 8 1 6 0
+A 9 2 7 0
+A 10 3 8 9 0

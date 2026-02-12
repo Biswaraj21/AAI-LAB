@@ -1,0 +1,14 @@
+% Reference-style input (variant 2)
+N 4
+K 6
+
+A 1 2 0
+A 2 3 1 0
+A 3 2 1 0
+A 4 4 2 3 0
+A 5 3 4 0
+A 6 5 5 0
+A 7 2 6 0
+A 8 3 6 2 0
+A 9 4 7 8 0
+A 10 2 9 0

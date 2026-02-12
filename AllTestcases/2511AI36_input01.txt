@@ -1,0 +1,21 @@
+% Input File 4: Bottle-Neck Structure
+% N = 3 Students, K = 5 Prompts per day
+N 3
+K 5
+
+% Parallel starting tasks
+A 1 2 0
+A 2 2 0
+A 3 2 0
+A 4 2 0
+
+% The Bottleneck: Depends on all four starting tasks
+A 5 5 1 2 3 4 0
+
+% Post-bottleneck expansion
+A 6 3 5 0
+A 7 3 5 0
+A 8 1 6 0
+A 9 1 7 0
+A 10 4 8 9 0
+A 11 2 10 0

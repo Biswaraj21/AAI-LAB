@@ -1,0 +1,20 @@
+% N = Number of students in a group
+% K = Number of prompts allowed per day
+
+% Assignment details with required prompts and Dependencies
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+
+
+N 3
+K 5
+
+A 1 2 0
+A 2 3 1 0
+A 3 2 1 0
+A 4 3 2 3 0
+A 5 2 3 0
+A 6 4 4 0
+A 7 1 5 0
+A 8 3 6 0
+A 9 2 6 7 0
+A 10 3 8 9 0

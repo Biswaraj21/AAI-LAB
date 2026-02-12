@@ -1,0 +1,16 @@
+% Configuration: 3 students, 5 prompts per day
+N 3
+K 5
+
+% Assignment format: A <id> <prompts> <dependencies> 0
+% Linear dependency chain
+A 1 2 0
+A 2 3 1 0
+A 3 2 2 0
+A 4 4 3 0
+A 5 3 4 0
+A 6 2 5 0
+A 7 3 6 0
+A 8 4 7 0
+A 9 2 8 0
+A 10 3 9 0

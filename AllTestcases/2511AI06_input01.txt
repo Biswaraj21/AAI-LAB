@@ -1,0 +1,23 @@
+% Assignment 1 - CS5205 Advanced AI Lab
+
+% Number of students in a group
+N 3
+
+% Number of prompts allowed per student per day
+K 6
+
+% Assignment details: A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 2 0
+A 2 2 0
+A 3 3 1 2 0
+A 4 2 1 0
+A 5 4 3 0
+A 6 3 3 4 0
+A 7 2 5 0
+A 8 2 6 0
+A 9 3 7 8 0
+A 10 1 9 0
+A 11 4 9 0
+A 12 2 10 11 0
+A 13 3 12 0
+A 14 1 13 0

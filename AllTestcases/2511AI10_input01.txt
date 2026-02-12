@@ -1,0 +1,16 @@
+% Comment line Ignore
+% Binary tree dependency structure
+% Assignments form a tree with multiple branches
+N 3
+K 7
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 5 0
+A 2 4 0
+A 3 3 1 0
+A 4 4 1 0
+A 5 2 2 0
+A 6 5 2 0
+A 7 3 3 4 0
+A 8 4 5 6 0
+A 9 2 7 0
+A 10 6 8 9 0

@@ -1,0 +1,16 @@
+% N = Number of students
+N 4
+% K = Prompts per student per day
+K 6
+
+% A <id> <prompt-count> <dependencies> 0
+A 1 1 0
+A 2 2 1 0
+A 3 2 2 0
+A 4 3 3 0
+A 5 2 4 0
+A 6 3 5 0
+A 7 1 6 0
+A 8 2 7 0
+A 9 3 8 0
+A 10 2 9 0

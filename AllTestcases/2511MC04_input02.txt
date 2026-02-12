@@ -1,0 +1,16 @@
+% N = Number of students
+N 5
+% K = Prompts per day
+K 3
+
+% A <id> <cost> <parents...> 0
+A 1 2 0
+A 2 2 1 0
+A 3 3 0      
+A 4 2 2 0    
+A 5 2 4 2 0
+A 6 2 0      
+A 7 2 6 0    
+A 8 2 0      
+A 9 2 8 0
+A 10 2 9 0

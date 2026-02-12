@@ -1,0 +1,16 @@
+% Test case 1
+N 4
+K 6
+
+A 1 5 0
+A 2 1 0
+A 3 2 2 0
+A 4 4 1 0
+A 5 3 2 0
+A 6 2 3 4 0
+A 7 3 6 0
+A 8 4 6 0
+A 9 1 8 0
+A 10 5 7 9 0
+
+%here minimum days required is 6

@@ -1,0 +1,20 @@
+% Sample Input 3
+N 5
+K 7
+
+A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 2 0
+A 2 3 0
+A 3 4 1 2 0
+A 4 1 1 0
+A 5 5 2 0
+A 6 2 3 4 0
+A 7 3 5 0
+A 8 4 6 7 0
+A 9 1 6 0
+A 10 2 8 9 0
+A 11 3 10 0
+A 12 4 8 0
+A 13 2 11 12 0
+A 14 5 13 0
+A 15 1 14 0

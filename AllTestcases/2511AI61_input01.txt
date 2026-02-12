@@ -1,0 +1,29 @@
+%duplicate assignment detection
+%non esistent dependenci detection
+
+
+N 3%garbage_value
+K 5
+%garbage_value
+A 1 1 0
+A 2 2 1 0%garbage_value
+A 3 2 1 0
+
+%----------------feature 1----------------------------
+%uncomment the below line to check the duplicate detection
+%A 3 6 1 0 %duplicate assignment id
+%--------------------------------------------
+
+A 4 3 2 3 0
+A 5 1 2 0
+A 6 2 3 0
+A 7 3 4 5 0%garbage_value
+%garbage_value
+A 8 2 6 0%garbage_value
+%garbage_value
+A 9 1 7 8 0
+
+%------------------feature 2--------------------------
+%comment the below input to check if assignment if depenedncies exist in input
+A 10 4 14 0 %depends on assignment 14 that doesnot exist in input
+%--------------------------------------------

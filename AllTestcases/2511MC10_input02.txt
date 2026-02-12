@@ -1,0 +1,16 @@
+% Configuration: 4 students, 6 prompts per day
+N 4
+K 6
+
+% Assignment format: A <id> <prompts> <dependencies> 0
+% Multiple independent branches
+A 1 3 0
+A 2 2 0
+A 3 4 0
+A 4 3 1 2 0
+A 5 2 2 3 0
+A 6 5 4 5 0
+A 7 3 1 0
+A 8 4 7 0
+A 9 2 6 8 0
+A 10 6 9 0

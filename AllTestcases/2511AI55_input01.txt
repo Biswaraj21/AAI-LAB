@@ -1,0 +1,13 @@
+% N = Students, K = Prompts per student
+N 3
+K 5
+A 1 2 0
+A 2 3 1 0
+A 3 4 2 0
+A 4 2 3 0
+A 5 5 4 0
+A 6 3 5 0
+A 7 4 0
+A 8 2 7 0
+A 9 3 0
+A 10 1 9 8 0

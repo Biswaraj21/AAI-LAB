@@ -1,0 +1,20 @@
+% Sample Input 2: Parallel Disconnected Pipelines
+% N = Number of Students
+N 2
+% K = Prompts per Student
+K 5
+% A <id> <cost> <dependencies> 0
+% -- Pipeline A --
+A 1 2 0
+A 2 3 1 0
+A 3 3 2 0
+A 4 2 3 0
+A 5 4 4 0
+A 6 2 5 0
+% -- Pipeline B (Independent) --
+A 7 3 0
+A 8 2 7 0
+A 9 4 8 0
+A 10 2 9 0
+A 11 3 10 0
+A 12 2 11 0

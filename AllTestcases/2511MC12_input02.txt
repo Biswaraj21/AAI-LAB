@@ -1,0 +1,14 @@
+% INPUT -2
+
+% N = Number of students in a group
+N 4
+% K = Number of prompts allowed per day
+K 6
+% A <id> <prompt-count> <dependencies> <terminating-symbol>
+A 1 2 0
+A 2 3 1 0
+A 3 2 1 0
+A 4 4 2 3 0
+A 5 1 3 0
+A 6 5 4 5 0
+A 7 2 6 0
