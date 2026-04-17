@@ -1,0 +1,135 @@
+# =============================================================================
+# input.txt  —  Garage Scheduler  (small, manually checkable)
+# =============================================================================
+#
+# HOW TO RUN:
+#   python garage_scheduler.py --input input.txt
+#   python garage_scheduler.py --input input.txt --seed 99
+#
+# =============================================================================
+# FORMAT
+# =============================================================================
+#
+# Line 1:   N  M  k  [seed]
+#             N    = number of car types
+#             M    = number of mechanics   (auto-labelled M1, M2 ...)
+#             k    = consecutive-task limit before a mandatory break
+#             seed = optional integer for reproducible runs
+#
+# Then N car blocks:
+#
+#   CAR <TypeLabel>  <num_instances>
+#   TASK <id>  [->  <child>:<prob>  ...]
+#
+# Task IDs use the hierarchical digit-suffix convention:
+#   Root tasks  : A1, A2, B1, B2 ...
+#   Sub-tasks   : A1 spawns A11, A12 ...  A11 spawns A111 ...
+#
+# Spawn rule:   random_roll > prob  →  sub-task FIRES
+#               random_roll ≤ prob  →  sub-task does NOT fire
+#   prob = 0.0  →  ALWAYS fires  (any roll > 0.0)
+#   prob = 1.0  →  NEVER  fires  (no roll can exceed 1.0)
+#
+# Car instances are auto-labelled C1, C2, C3 ... in the order they appear.
+#
+# =============================================================================
+# HAND-TRACE  (verify this yourself before running)
+# =============================================================================
+#
+# Config:  N=2,  M=2,  k=2,  seed=99
+#
+# ── DAG for C1 (car type T1) ─────────────────────────────────────────────────
+#
+#   Adjacency list:
+#     A1  ->  A11:0.0   (prob=0.0 → ALWAYS spawns A11)
+#     A2                (leaf)
+#     A11               (leaf)
+#
+#   Topological order:  A1, A2, A11
+#
+# ── DAG for C2 (car type T2) ─────────────────────────────────────────────────
+#
+#   Adjacency list:
+#     B1  ->  B11:1.0   (prob=1.0 → NEVER spawns B11)
+#     B2                (leaf)
+#     B11               (leaf)
+#
+#   Topological order:  B1, B2, B11
+#
+# ── Phase 1 — Initial schedule ───────────────────────────────────────────────
+#
+#   Flat task queue (topological, car by car):
+#     [ A1(C1), A2(C1), A11(C1), B1(C2), B2(C2), B11(C2) ]
+#
+#   Round-robin assignment with k=2:
+#
+#     Task      Mechanic  Consec  Action
+#     ────────  ────────  ──────  ───────────────────────────────
+#     A1(C1)    M1        1       t=0
+#     A2(C1)    M2        1       t=0
+#     A11(C1)   M1        2       t=1
+#     B1(C2)    M2        2       t=1
+#     B2(C2)    M1        2=k     BREAK at t=2  then  B2(C2) at t=3   consec→1
+#     B11(C2)   M2        2=k     BREAK at t=2  then  B11(C2) at t=3  consec→1
+#
+#   Expected initial grid:
+#
+#     t  |  M1          M2
+#     ───┼──────────────────────
+#     0  |  A1(C1)      A2(C1)
+#     1  |  A11(C1)     B1(C2)
+#     2  |  [BREAK]     [BREAK]
+#     3  |  B2(C2)      B11(C2)
+#
+# ── Phase 2 — Simulation ─────────────────────────────────────────────────────
+#
+#   t=0:
+#     M1 finishes A1(C1)  → A1->A11 prob=0.0 → roll(any)>0.0 → SPAWN A11(C1)
+#     M2 finishes A2(C1)  → leaf, nothing spawned
+#     Spawned A11(C1) inserted → M1 next free slot = t=4
+#
+#   t=1:
+#     M1 finishes A11(C1) → leaf, nothing spawned
+#     M2 finishes B1(C2)  → B1->B11 prob=1.0 → roll(any)≤1.0 → NO spawn
+#
+#   t=2:  M1 BREAK,  M2 BREAK
+#
+#   t=3:
+#     M1 finishes B2(C2)  → leaf
+#     M2 finishes B11(C2) → leaf
+#
+#   t=4:
+#     M1 finishes A11(C1) [spawned] → leaf
+#     M2 idle
+#
+#   Expected final grid:
+#
+#     t  |  M1           M2
+#     ───┼───────────────────────
+#     0  |  A1(C1)       A2(C1)
+#     1  |  A11(C1)      B1(C2)
+#     2  |  [BREAK]      [BREAK]
+#     3  |  B2(C2)       B11(C2)
+#     4  |  *A11(C1)*    [----]
+#
+# =============================================================================
+
+
+# Line 1:  N   M   k   seed
+           2   2   2   99
+
+
+# ── Car type 1 : T1  (1 instance → C1) ──────────────────────────────────────
+CAR T1  1
+
+TASK A1  ->  A11:0.0
+TASK A2
+TASK A11
+
+
+# ── Car type 2 : T2  (1 instance → C2) ──────────────────────────────────────
+CAR T2  1
+
+TASK B1  ->  B11:1.0
+TASK B2
+TASK B11

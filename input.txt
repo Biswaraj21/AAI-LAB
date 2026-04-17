@@ -1,0 +1,156 @@
+# =============================================================================
+# input.txt  —  Garage Scheduler Input File
+# =============================================================================
+#
+# HOW TO RUN:
+#   python garage_scheduler.py --input input.txt
+#   python garage_scheduler.py --input input.txt --seed 42
+#   python garage_scheduler.py --input input.txt --verbose
+#
+# =============================================================================
+# FORMAT OVERVIEW
+# =============================================================================
+#
+# LINE 1  :  N  M  k  [seed]
+#              N    = number of car TYPES
+#              M    = number of mechanics  (named M1, M2, ... MM)
+#              k    = fatigue limit (break after k consecutive tasks)
+#              seed = optional integer for reproducible runs (omit = random)
+#
+# -----------------------------------------------------------------------------
+# CARS SECTION  (N blocks, one per car type)
+# -----------------------------------------------------------------------------
+# Each block starts with:
+#   CAR <name>  <num_instances>
+#       <name>          = car type label, e.g. C1, C2, Sedan, SUV …
+#       <num_instances> = how many cars of this type to service today
+#
+# Followed by the DAG in ADJACENCY-LIST (linked-list) format:
+#   TASK <task_id>  [->  <child_id>:<prob>  <child_id>:<prob>  ...]
+#
+#   • <task_id>  names follow the pattern:
+#         Root tasks          : A1, A2, B1, B2 …  (any alphanumeric label)
+#         Sub-tasks of A1     : A11, A12, A13 …
+#         Sub-tasks of A11    : A111, A112 …
+#         (depth is unlimited; just keep appending a digit)
+#
+#   • The  ->  part lists every child that MIGHT be spawned when this task
+#     completes, together with its spawn-probability threshold:
+#         roll > prob  →  child task IS spawned      (high prob = rare spawn)
+#         roll ≤ prob  →  child task is NOT spawned  (low  prob = common spawn)
+#
+#   • A task with NO  ->  part is a LEAF (it never spawns anything).
+#
+#   • ARRAY-LIST shorthand: instead of one TASK line per node you can write
+#     all children of the same parent on a single line:
+#         TASK A1 -> A11:0.3  A12:0.5  A13:0.7
+#
+# =============================================================================
+#
+# EXAMPLE DAG (Sedan):
+#
+#   Root tasks A1 and A2 are always scheduled.
+#   Completing A1 may spawn A11 (70% chance) and/or A12 (50% chance).
+#   Completing A11 may spawn A111 (60% chance).
+#   A2 and A12 are leaves — they never spawn anything.
+#
+#   Adjacency list:
+#       TASK A1  ->  A11:0.30  A12:0.50
+#       TASK A11 ->  A111:0.40
+#       TASK A111                          ← leaf
+#       TASK A2                            ← leaf
+#       TASK A12                           ← leaf
+#
+# =============================================================================
+
+
+# Line 1: N  M  k  seed
+3  3  3  42
+
+
+# =============================================================================
+# CAR TYPE 1 : Sedan  — 3 instances (C1, C2, C3 will be auto-named)
+# =============================================================================
+CAR Sedan  3
+
+# Root task A1 = Brake Check
+# Completing A1 may spawn:
+#   A11 (Tire Rotation)  — 70% spawn chance  (roll > 0.30)
+#   A12 (Axle Inspect)   — 40% spawn chance  (roll > 0.60)
+TASK A1  ->  A11:0.30  A12:0.60
+
+# A11 = Tire Rotation — may spawn A111 (Wheel Alignment)
+TASK A11 ->  A111:0.40
+
+# A111 = Wheel Alignment — leaf, no further spawns
+TASK A111
+
+# A12 = Axle Inspect — leaf
+TASK A12
+
+# Root task A2 = Oil Change
+# Completing A2 may spawn:
+#   A21 (Filter Replace) — 50% spawn chance
+#   A22 (Drain Flush)    — 30% spawn chance  (roll > 0.70)
+TASK A2  ->  A21:0.50  A22:0.70
+
+# A21 = Filter Replace — leaf
+TASK A21
+
+# A22 = Drain Flush — leaf
+TASK A22
+
+
+# =============================================================================
+# CAR TYPE 2 : SUV  — 2 instances (C4, C5)
+# =============================================================================
+CAR SUV  2
+
+# Root task B1 = Fluid Flush
+# May spawn B11 (Brake Pads) with 65% chance
+TASK B1  ->  B11:0.35
+
+# B11 = Brake Pads — may spawn B111 (Caliper Check)
+TASK B11 ->  B111:0.45
+
+# B111 = Caliper Check — leaf
+TASK B111
+
+# Root task B2 = Wheel Balance
+# May spawn B21 (Suspension Check) with 50% chance
+TASK B2  ->  B21:0.50
+
+# B21 = Suspension Check — may spawn B211 (Bushing Replace)
+TASK B21 ->  B211:0.60
+
+# B211 = Bushing Replace — leaf
+TASK B211
+
+# Root task B3 = AC Recharge — leaf
+TASK B3
+
+
+# =============================================================================
+# CAR TYPE 3 : Truck  — 2 instances (C6, C7)
+# =============================================================================
+CAR Truck  2
+
+# Root task C1 = Diff Service
+# May spawn C11 (Gearbox Lube) with 55% chance
+TASK C1  ->  C11:0.45
+
+# C11 = Gearbox Lube — may spawn C111 (Seal Inspect)
+TASK C11 ->  C111:0.50
+
+# C111 = Seal Inspect — leaf
+TASK C111
+
+# Root task C2 = Exhaust Check
+# May spawn C21 (Air Filter) with 70% chance
+TASK C2  ->  C21:0.30
+
+# C21 = Air Filter — may spawn C211 (Coolant Flush)
+TASK C21 ->  C211:0.55
+
+# C211 = Coolant Flush — leaf
+TASK C211

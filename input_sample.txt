@@ -1,9 +1,18 @@
-% number of rooms
-M 5
-% number of short-term-courses
-N 10
-% course details
-% course id start-day end-day duration
-C 1 4 10 3
-C 2 7 20 6
-C 3 8 27 10
+# N  M  k  seed
+2  3  2  42
+
+# ───────────── CAR TYPE 1 ─────────────
+CAR Sedan 2
+
+TASK A1 -> A11:0.7 A12:0.5
+TASK A11
+TASK A12 -> A121:0.3
+TASK A121
+
+# ───────────── CAR TYPE 2 ─────────────
+CAR SUV 1
+
+TASK B1 -> B11:0.6
+TASK B11 -> B111:0.4 B112:0.8
+TASK B111
+TASK B112

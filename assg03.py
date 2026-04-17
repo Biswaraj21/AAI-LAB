@@ -121,7 +121,7 @@ def objective_two(solver, deadline, c1, c2):
     
     for pc in range(1, max_range):
         for pg in range(1, max_range):
-            cost = (pc * c1) + (pg * c2) # 
+            cost = (pc * c1) + (pg * c2) 
             if cost >= min_cost: continue
             if solver.solve_a_star([pc, pg]) <= deadline:
                 min_cost = cost
